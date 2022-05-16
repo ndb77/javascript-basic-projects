@@ -199,9 +199,9 @@ nav {
   display: none;
 }
 .links {
-  /* height: 0;
-  overflow: hidden;
-  transition: var(--transition); */
+  height: 0;
+  overflow: hidden; /* Prevents overflow text from showing*/
+  transition: var(--transition);
 }
 .show-links {
   height: 10rem;
