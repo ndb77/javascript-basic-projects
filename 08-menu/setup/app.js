@@ -84,38 +84,77 @@ const menuList = [
 ];
 
 const section_center = document.querySelector('.section-center') // all of the menu items are encapulated by this class
-const filterBtns = document.querySelectorAll('.filter-btn') // selects all of the filter buttons
+const btn_container = document.querySelector('.btn-container')
 // console.log(filterBtns)
 
 // load items
 window.addEventListener('DOMContentLoaded',function(){
-  console.log(menuList)
   displayMenuItems(menuList);
-  // console.log(displayMenu);
+  displayButtons();
 });
 
-// filter items
-// adding an event listener to all filterBtns
-// when a filter button is clicked, the e.current.target.dataset.id is set to category
-// the menuCategory is built by filtering the menuList 
-filterBtns.forEach(function(filter_btn){
-  filter_btn.addEventListener('click',function(e){
-    console.log(e.currentTarget.dataset.id)
-    const category = e.currentTarget.dataset.id; // clicked category
-    const menuCategory = menuList.filter(function(menuItem){
-      // console.log(menuItem)
-      if(menuItem.category == category){
-        return menuItem
-      }
-    });
-    if(category=="all"){
-      displayMenuItems(menuList)
-    }else{
-      displayMenuItems(menuCategory)
+// display the items 
+function displayMenuItems(menuItems){
+  let displayMenu = menuItems.map(function(item){ // the iterator variable is every item in the menuList
+    return `<article class="menu-item">
+    <img src=${item.img} class="photo" alt=${item.title}/>
+    <div class="item-info">
+      <header>
+        <h4>${item.title}</h4>
+        <h4 class="price">${item.price}</h4>
+      </header>
+      <p class="item-text">${item.desc}</p>
+    </div>
+  </article>`
+    }); // converts the menuItem into formatted HTML
+    displayMenu = displayMenu.join(""); // the list with formatted HTML is joined together. 
+    section_center.innerHTML = displayMenu; // sets the section_center to be the displayMenu
+}
+
+// display the buttons
+function displayButtons(){
+  const categories = menuList.reduce(function(values,item){ //values references the array returned(default = ['all']), item references individual items in the menuList
+    // console.log(item);
+    if(!values.includes(item.category)){ // checks if the values array contains the item.category already 
+      values.push(item.category);// adds the item.category to the values array 
     }
-    console.log(menuCategory);
+    return values; // all reduce functions require returning values
+  },['all'])
+
+  // at this point categories is created with unique items in the list
+  // here we will assign each category to a button and put this in the new categoryBtns list
+  const categoryBtns = categories.map(function(category){
+    return `<button class="filter-btn" type="button" data-id="${category}">${category}</button>`
+  }).join("")// we join the categoryBtns list to create interpretable HTML
+  btn_container.innerHTML = categoryBtns;
+  // at this point the buttons have been dynamically generated on the page
+
+  // we create a variable to give access to the buttons 
+  const filterBtns = document.querySelectorAll('.filter-btn') // selects all of the filter buttons
+  // filter items
+  // adding an event listener to all filterBtns
+  // when a filter button is clicked, the e.current.target.dataset.id is set to category
+  // the menuCategory is built by filtering the menuList 
+  filterBtns.forEach(function(filter_btn){
+    filter_btn.addEventListener('click',function(e){
+      console.log(e.currentTarget.dataset.id)
+      const category = e.currentTarget.dataset.id; // clicked category
+      const menuCategory = menuList.filter(function(menuItem){
+        // console.log(menuItem)
+        if(menuItem.category == category){
+          return menuItem
+        }
+      });
+      if(category=="all"){
+        displayMenuItems(menuList) // show all items
+      }else{
+        displayMenuItems(menuCategory) // show the filtered items
+      }
+      console.log(menuCategory);
+    });
   });
-});
+
+}
 
 // filterBtns.forEach(function(filter_button){ // question is a value in the questionList 
 //   // console.log(filter_button);
@@ -137,22 +176,6 @@ filterBtns.forEach(function(filter_btn){
   
 // });
 
-function displayMenuItems(menuItems){
-  let displayMenu = menuItems.map(function(item){ // the iterator variable is every item in the menuList
-    return `<article class="menu-item">
-    <img src=${item.img} class="photo" alt=${item.title}/>
-    <div class="item-info">
-      <header>
-        <h4>${item.title}</h4>
-        <h4 class="price">${item.price}</h4>
-      </header>
-      <p class="item-text">${item.desc}</p>
-    </div>
-  </article>`
-    }); // converts the menuItem into formatted HTML
-    displayMenu = displayMenu.join(""); // the list with formatted HTML is joined together. 
-    section_center.innerHTML = displayMenu; // sets the section_center to be the displayMenu
-}
 
 
 // my solution - for breakfast menu only, proof of concept
