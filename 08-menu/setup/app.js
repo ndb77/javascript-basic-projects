@@ -1,4 +1,6 @@
-const menu = [
+// normally, you need to get the data from a server(AJAX: With Ajax, web applications can send and retrieve data from a server asynchronously without interfering with the display and behaviour of the existing page.)
+
+const menuList = [
   {
     id: 1,
     title: "buttermilk pancakes",
@@ -72,3 +74,29 @@ const menu = [
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
 ];
+
+const section_center = document.querySelector('.section-center')
+
+window.addEventListener('DOMContentLoaded',function(){
+  console.log(menuList)
+  displayMenuItems(menuList);
+  // console.log(displayMenu);
+});
+
+function displayMenuItems(menuItems){
+  let displayMenu = menuItems.map(function(item){ // the iterator variable is every item in the menuList
+    return `<article class="menu-item">
+    <img src=${item.img} class="photo" alt=${item.title}/>
+    <div class="item-info">
+      <header>
+        <h4>${item.title}</h4>
+        <h4 class="price">${item.price}</h4>
+      </header>
+      <p class="item-text">${item.desc}</p>
+    </div>
+  </article>`
+    }); // converts the menuItem into formatted HTML
+    displayMenu = displayMenu.join(""); // formatted HTML is joined together
+    section_center.innerHTML = displayMenu; // sets the section_center to be the displayMenu
+}
+
