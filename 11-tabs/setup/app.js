@@ -15,7 +15,6 @@ about.addEventListener('click',function(e){
         articles.forEach(function(article){
             article.classList.remove('active')
         })
-
         const element = document.getElementById(id); // getting element by id by passing id from e.target
         element.classList.add("active");
 
