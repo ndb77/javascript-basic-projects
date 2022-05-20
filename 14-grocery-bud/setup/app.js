@@ -17,6 +17,7 @@ let editID = '';
 form.addEventListener('submit',addItem)
 //clear items
 clear_btn.addEventListener('click',clearItems)
+
 // ****** FUNCTIONS **********
 function addItem(e){
     e.preventDefault();
@@ -39,13 +40,23 @@ function addItem(e){
           <button class="delete-button">
             <i class="fas fa-trash">Delete</i>
           </button>
-        </div>`
+        </div>`;
+
         //append the item to the rest of the grocery list
         grocery_list.appendChild(element);
         //display alert
         display_alert('item was added', 'success');
         // show container for the list
-        container.classList.add('show-container')
+        container.classList.add('show-container');
+
+        // these functions must be created dynamically because they are  
+        // accessible only after a grocery_value is added to the grocery list
+        // delete function
+        const delete_btn = element.querySelector('.delete-button');
+        delete_btn.addEventListener('click',deleteItem);
+        // edit function 
+        const edit_btn = element.querySelector('.edit-button');
+        edit_btn.addEventListener('click',editItem);
         // add to local storage
         addToLocalStorage(id,grocery_value);
         //set back to default
@@ -57,6 +68,7 @@ function addItem(e){
         display_alert('Please Enter Value','danger')
     }
 }
+
 
 // clear items will select all elements with the grocery-item class and delete them
 function clearItems(){
@@ -73,6 +85,19 @@ function clearItems(){
     setBackToDefault();
 }
 
+
+function deleteItem(click_event){
+     // look at the clicked button, and go up 2 parent elements to get grocery-item
+     // element is the 2nd order parent of the current target(delete button)
+    console.log(click_event.currentTarget.parentElement.parentElement)
+    const element = click_event.currentTarget.parentElement.parentElement;
+    grocery_list.removeChild(element)
+}
+
+function editItem(){
+    // console.log('item edit')
+}
+
 // display alert
 function display_alert(text,action){
     alert.textContent = text;
@@ -85,7 +110,7 @@ function display_alert(text,action){
 }
 
 function setBackToDefault(){
-    console.log('set back to default')
+    // console.log('set back to default')
     grocery_name.value = "";
     editFlag = false;
     editID = "";
@@ -96,6 +121,6 @@ function setBackToDefault(){
 // ****** LOCAL STORAGE **********
 // add to local storage 
 function addToLocalStorage(id,value){
-    console.log('add to local storage')
+    // console.log('add to local storage')
 }
 // ****** SETUP ITEMS **********
