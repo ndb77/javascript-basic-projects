@@ -19,7 +19,7 @@ form.addEventListener('submit',function(e){
   e.preventDefault();
   const value = parseInt(amount.value);
   console.log(value)
-  if(isNaN(value)||value<0||value>9){
+  if(isNaN(value)||value<=0||value>9){
     result.innerHTML = `<p class='result'>${text[0]}</p>`
   }else{
     // const result_string = []
