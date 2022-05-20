@@ -14,6 +14,7 @@ let editID = '';
 // ****** EVENT LISTENERS **********
 
 //submit form - when the grocery-form is submitted, do this
+// this works for both adding and editing, as the add button becomes submit button after the edit button on dynamically created items get clicked
 form.addEventListener('submit',addItem)
 //clear items
 clear_btn.addEventListener('click',clearItems)
@@ -21,9 +22,10 @@ clear_btn.addEventListener('click',clearItems)
 // ****** FUNCTIONS **********
 function addItem(e){
     e.preventDefault();
+    // grocery_value is what is currently in the form input bar
     const grocery_value = grocery_name.value;
     const id = new Date().getTime().toString();
-    if(grocery_value && !editFlag){ // not empty and edit flag is false --> add new item to list
+    if(grocery_value !=="" && !editFlag){ // not empty and edit flag is false --> add new item to list
         // want to create a grocery item.
         const element = document.createElement('article')
         // add class
@@ -62,8 +64,14 @@ function addItem(e){
         //set back to default
         setBackToDefault();
     }
-    else if(!grocery_value && editFlag){ // not empty and edit flag is true --> edit existing item in list
-
+    else if(grocery_value !=="" && editFlag){ // not empty and edit flag is true --> edit existing item in list
+        // the editElement is set when an edit button is clicked on
+        // when edit button is clicked, the submit button is set to "edit" with an eventListener
+        editElement.innerHTML = grocery_value; 
+        display_alert("value changed", "success");
+        // edit local storage
+        editLocalStorage(editID,grocery_value)
+        setBackToDefault()
     }else{ // empty --> don't add or edit anything
         display_alert('Please Enter Value','danger')
     }
@@ -89,13 +97,35 @@ function clearItems(){
 function deleteItem(click_event){
      // look at the clicked button, and go up 2 parent elements to get grocery-item
      // element is the 2nd order parent of the current target(delete button)
-    console.log(click_event.currentTarget.parentElement.parentElement)
+    // console.log(click_event.currentTarget.parentElement.parentElement)
+    // console.log(grocery_list.querySelectorAll('.grocery-item'))
     const element = click_event.currentTarget.parentElement.parentElement;
+    console.log(element);
+    const id = element.dataset.id;
     grocery_list.removeChild(element)
+    if(grocery_list.children.length===0){
+        container.classList.remove("show-container")
+    }
+    display_alert('item removed!','danger');
+    setBackToDefault();
+    // remove from local storage
+    // removeFromLocalStorage(id);
 }
 
-function editItem(){
-    // console.log('item edit')
+function editItem(e){
+    // getting the grocery item paragraph
+    const element = e.currentTarget.parentElement.parentElement;
+    //set form value
+    //set edit item
+    console.log(e.currentTarget)
+    editElement = e.currentTarget.parentElement.previousElementSibling;
+    
+    // setting the input form to be the selected item
+    grocery_name.value = editElement.innerHTML
+    editFlag = true;
+    editID = element.dataset.id;
+
+    submit_btn.textContent = "edit";
 }
 
 // display alert
@@ -122,5 +152,14 @@ function setBackToDefault(){
 // add to local storage 
 function addToLocalStorage(id,value){
     // console.log('add to local storage')
+}
+function removeFromLocalStorage(id){
+
+}
+
+function editLocalStorage(id,value){
+    console.log(id)
+    console.log(value)
+
 }
 // ****** SETUP ITEMS **********
